@@ -20,6 +20,7 @@ use solana_sdk::{
     account::{Account, AccountSharedData, ReadableAccount, WritableAccount},
     bpf_loader,
     clock::Clock,
+    ed25519_program,
     epoch_rewards::EpochRewards,
     epoch_schedule::EpochSchedule,
     feature_set::{remove_rounding_in_fee_calculation, FeatureSet},
@@ -34,6 +35,7 @@ use solana_sdk::{
     pubkey::Pubkey,
     rent::Rent,
     reserved_account_keys::ReservedAccountKeys,
+    secp256k1_program,
     signature::{Keypair, Signature},
     signer::Signer,
     slot_hashes::SlotHashes,
@@ -483,6 +485,13 @@ impl LiteSVM {
                 let mut account_found = true;
                 let account = if solana_sdk::sysvar::instructions::check_id(key) {
                     construct_instructions_account(message)
+                } else if ed25519_program::check_id(key) || secp256k1_program::check_id(key) {
+                    let mut account = AccountSharedData::default();
+                    account.set_owner(native_loader::id());
+                    account.set_lamports(1);
+                    account.set_executable(true);
+
+                    account
                 } else {
                     let instruction_account = u8::try_from(i)
                         .map(|i| instruction_accounts.contains(&&i))

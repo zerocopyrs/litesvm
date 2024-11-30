@@ -2,6 +2,7 @@ use crate::types::TransactionResult;
 use indexmap::IndexMap;
 use solana_sdk::signature::Signature;
 
+#[derive(Debug, Clone)]
 pub struct TransactionHistory(IndexMap<Signature, TransactionResult>);
 
 impl TransactionHistory {

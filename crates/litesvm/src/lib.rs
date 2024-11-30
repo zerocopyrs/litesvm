@@ -77,9 +77,10 @@ mod history;
 mod precompiles;
 mod utils;
 
+#[derive(Clone)]
 pub struct LiteSVM {
     pub accounts: AccountsDb,
-    airdrop_kp: Keypair,
+    airdrop_kp: Arc<Keypair>,
     feature_set: Arc<FeatureSet>,
     latest_blockhash: Hash,
     log_collector: Rc<RefCell<LogCollector>>,
@@ -95,7 +96,7 @@ impl Default for LiteSVM {
     fn default() -> Self {
         Self {
             accounts: Default::default(),
-            airdrop_kp: Keypair::new(),
+            airdrop_kp: Arc::new(Keypair::new()),
             feature_set: Default::default(),
             latest_blockhash: create_blockhash(b"genesis"),
             log_collector: Default::default(),

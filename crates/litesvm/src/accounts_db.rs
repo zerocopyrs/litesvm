@@ -260,8 +260,8 @@ impl AccountsDb {
                         .data()
                         .len()
                         .saturating_add(program_data.len()),
-                    metrics).unwrap_or_else(|_|
-                        panic!("Error encountered when calling LoadedProgram::new() for bpf_loader_upgradeable.")
+                    metrics).unwrap_or_else(|err|
+                        panic!("Error encountered when calling LoadedProgram::new() for bpf_loader_upgradeable; program_data={programdata_address}; err={err}")
                     )
             } else {
                 panic!("Index out of bounds using bpf_loader_upgradeable.");

@@ -1033,7 +1033,7 @@ fn execute_tx_helper(
 fn get_compute_budget_limits(
     sanitized_tx: &SanitizedTransaction,
 ) -> Result<ComputeBudgetLimits, ExecutionResult> {
-    process_compute_budget_instructions(SVMMessage::program_instructions_iter(sanitized_tx))
+    process_compute_budget_instructions(SVMMessage::program_instructions_iter(sanitized_tx), &FeatureSet::all_enabled())
         .map_err(|e| ExecutionResult {
             tx_result: Err(e),
             ..Default::default()
